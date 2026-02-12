@@ -2,436 +2,168 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>Fashion Store Login Page – Alerts (clear feedback)</title>
-    <!-- Font Awesome 6 -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Fashion Store</title>
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "your-api-key",
+            authDomain: "your-project.firebaseapp.com",
+            projectId: "your-project-id",
+            storageBucket: "your-project.appspot.com",
+            messagingSenderId: "123456789",
+            appId: "your-app-id"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        window.auth = auth;
+        window.signInWithEmailAndPassword = signInWithEmailAndPassword;
+    </script>
     <style>
-        /* ---------- same beautiful styles, no changes ---------- */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            font-family: Arial, sans-serif;
         }
         body {
-            background: #f1f3f6;
+            background: #f5f5f5;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            padding: 20px;
         }
         .login-container {
-            max-width: 850px;
-            width: 100%;
-            background: #fff;
+            background: white;
+            padding: 40px;
             border-radius: 8px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            display: flex;
-            flex-wrap: wrap;
-            overflow: hidden;
-            animation: bounceIn 0.8s ease;
+            width: 100%;
+            max-width: 400px;
         }
-        .login-left {
-            background: #2874f0;
-            color: white;
-            padding: 40px 30px;
-            flex: 1 1 40%;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            min-height: 280px;
-        }
-        .login-left h2 {
-            font-size: 28px;
-            font-weight: 500;
-            margin-bottom: 16px;
-            line-height: 1.2;
-        }
-        .login-left p {
-            font-size: 18px;
-            line-height: 1.5;
-            opacity: 0.9;
+        .login-container h2 {
+            text-align: center;
             margin-bottom: 30px;
-        }
-        .login-left i {
-            font-size: 60px;
-            margin-top: 20px;
-            color: rgba(255,255,255,0.8);
-        }
-        .login-right {
-            flex: 1 1 60%;
-            padding: 40px 30px;
-            background: white;
-        }
-        .login-form {
-            max-width: 350px;
-            margin: 0 auto;
-        }
-        .login-form h3 {
-            font-size: 24px;
-            font-weight: 500;
-            color: #212121;
-            margin-bottom: 30px;
+            color: #333;
         }
         .input-group {
-            position: relative;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
         }
         .input-group input {
             width: 100%;
-            padding: 12px 0;
-            border: none;
-            border-bottom: 1px solid #e0e0e0;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
             font-size: 16px;
-            outline: none;
-            transition: border-color 0.2s;
         }
         .input-group input:focus {
-            border-bottom-color: #2874f0;
-        }
-        .input-group label {
-            position: absolute;
-            top: 12px;
-            left: 0;
-            color: #878787;
-            font-size: 16px;
-            pointer-events: none;
-            transition: 0.2s ease all;
-        }
-        .input-group input:focus ~ label,
-        .input-group input:valid ~ label {
-            top: -12px;
-            font-size: 12px;
-            color: #2874f0;
-        }
-        .forgot-link {
-            text-align: right;
-            margin-top: -15px;
-            margin-bottom: 25px;
-        }
-        .forgot-link a {
-            color: #2874f0;
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 500;
+            outline: none;
+            border-color: #007bff;
         }
         .login-btn {
-            background: #fb641b;
+            width: 100%;
+            padding: 12px;
+            background: #007bff;
             color: white;
             border: none;
-            width: 100%;
-            padding: 14px;
+            border-radius: 4px;
             font-size: 16px;
-            font-weight: 600;
-            border-radius: 2px;
             cursor: pointer;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            transition: background 0.2s;
             margin-bottom: 20px;
         }
         .login-btn:hover {
-            background: #f85a0e;
-        }
-        .or-divider {
-            display: flex;
-            align-items: center;
-            text-align: center;
-            color: #878787;
-            font-size: 14px;
-            margin: 20px 0;
-        }
-        .or-divider::before,
-        .or-divider::after {
-            content: '';
-            flex: 1;
-            border-bottom: 1px solid #e0e0e0;
-        }
-        .or-divider::before {
-            margin-right: 10px;
-        }
-        .or-divider::after {
-            margin-left: 10px;
-        }
-        .otp-btn {
-            background: white;
-            color: #2874f0;
-            border: 1px solid #e0e0e0;
-            width: 100%;
-            padding: 14px;
-            font-size: 16px;
-            font-weight: 600;
-            border-radius: 2px;
-            cursor: pointer;
-            transition: background 0.2s;
-            margin-bottom: 30px;
-            box-shadow: none;
-        }
-        .otp-btn:hover {
-            background: #f5faff;
-            border-color: #2874f0;
-        }
-        .terms {
-            font-size: 12px;
-            color: #878787;
-            line-height: 1.5;
-            margin-bottom: 20px;
-        }
-        .terms a {
-            color: #2874f0;
-            text-decoration: none;
+            background: #0056b3;
         }
         .signup-link {
             text-align: center;
-            font-size: 15px;
-            color: #212121;
+            margin-top: 20px;
         }
         .signup-link a {
-            color: #2874f0;
-            font-weight: 600;
+            color: #007bff;
             text-decoration: none;
-            margin-left: 5px;
         }
-        @media (max-width: 700px) {
-            .login-left {
-                display: none;
-            }
-            .login-right {
-                flex: 1 1 100%;
-                padding: 30px 20px;
-            }
-            .login-form {
-                max-width: 100%;
-            }
+        .demo-info {
+            background: #e7f3ff;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            color: #0056b3;
         }
-        /* ---------- ANIMATIONS ---------- */
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes slideInLeft {
-            from { transform: translateX(-50px); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-        @keyframes slideInRight {
-            from { transform: translateX(50px); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-        @keyframes bounceIn {
-            0% { transform: scale(0.3); opacity: 0; }
-            50% { transform: scale(1.05); }
-            70% { transform: scale(0.9); }
-            100% { transform: scale(1); opacity: 1; }
-        }
-        @keyframes pulseGlow {
-            0%, 100% { box-shadow: 0 0 5px rgba(251, 100, 27, 0.5); }
-            50% { box-shadow: 0 0 20px rgba(251, 100, 27, 0.8), 0 0 30px rgba(251, 100, 27, 0.6); }
-        }
-        @keyframes shimmer {
-            0% { background-position: -200% 0; }
-            100% { background-position: 200% 0; }
-        }
-        @keyframes slideInFromBottom {
-            from { transform: translateY(100px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-        @keyframes fadeInScale {
-            from { transform: scale(0.8); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
-        }
-        @keyframes colorShift {
-            0%, 100% { background: linear-gradient(45deg, #2874f0, #1e40af); }
-            50% { background: linear-gradient(45deg, #1e40af, #2874f0); }
-        }
-        @keyframes textGlow {
-            0%, 100% { text-shadow: 0 0 5px rgba(255, 255, 255, 0.5); }
-            50% { text-shadow: 0 0 20px rgba(255, 255, 255, 0.8), 0 0 30px rgba(255, 255, 255, 0.6); }
-        }
-        @keyframes borderGlow {
-            0%, 100% { border-color: #e0e0e0; box-shadow: none; }
-            50% { border-color: #2874f0; box-shadow: 0 0 10px rgba(40, 116, 240, 0.3); }
-        }
-        @keyframes iconBounce {
-            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-            40% { transform: translateY(-10px); }
-            60% { transform: translateY(-5px); }
-        }
-        @keyframes cardLift {
-            0% { transform: translateY(0); box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-            100% { transform: translateY(-5px); box-shadow: 0 4px 20px rgba(0,0,0,0.15); }
-        }
-        @keyframes buttonPress {
-            0% { transform: scale(1); }
-            50% { transform: scale(0.95); }
-            100% { transform: scale(1); }
-        }
-
-        /* Animation utility classes */
-        .animate-fade-in-up { animation: fadeInUp 0.8s ease; }
-        .animate-slide-in-left { animation: slideInLeft 0.8s ease; }
-        .animate-slide-in-right { animation: slideInRight 0.8s ease; }
-        .animate-bounce-in { animation: bounceIn 0.8s ease; }
-        .animate-pulse-glow { animation: pulseGlow 2s infinite; }
-        .animate-shimmer { animation: shimmer 2s infinite; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent); background-size: 200% 100%; }
-        .animate-slide-in-from-bottom { animation: slideInFromBottom 0.8s ease; }
-        .animate-fade-in-scale { animation: fadeInScale 0.8s ease; }
-        .animate-color-shift { animation: colorShift 3s infinite; }
-        .animate-text-glow { animation: textGlow 2s infinite; }
-        .animate-border-glow { animation: borderGlow 2s infinite; }
-        .animate-icon-bounce { animation: iconBounce 2s infinite; }
-        .animate-card-lift { animation: cardLift 0.3s ease; }
-        .animate-button-press { animation: buttonPress 0.2s ease; }
     </style>
 </head>
 <body>
     <div class="login-container">
-        <!-- LEFT: Fashion Store brand panel -->
-        <div class="login-left">
-            <div>
-                <h2>Login</h2>
-                <p>Get access to your Orders, Wishlist and Recommendations</p>
-            </div>
-            <i class="fas fa-shopping-cart fa-4x"></i>
+        <h2>Login</h2>
+
+        <div class="demo-info">
+            <strong>Demo Instructions:</strong><br>
+            1. Go to register.html and create an account with:<br>
+            Email: demo@example.com<br>
+            Password: demo123<br>
+            2. Then come back here to login.
         </div>
 
-        <!-- RIGHT: Login form with ALERTS for every action -->
-        <div class="login-right">
-            <div class="login-form">
-                <h3>Login</h3>
+        <div class="input-group">
+            <input type="email" id="emailMobile" placeholder="Email" required>
+        </div>
 
-                <!-- Demo credentials note -->
-                <div style="background: #f0f8ff; padding: 10px; border-radius: 4px; margin-bottom: 20px; font-size: 14px; color: #2563eb;">
-                    <strong>Demo Credentials:</strong><br>
-                    Email: demo@example.com<br>
-                    Password: demo123
-                </div>
+        <div class="input-group">
+            <input type="password" id="password" placeholder="Password" required>
+        </div>
 
-                <!-- Email / Mobile -->
-                <div class="input-group">
-                    <input type="text" id="emailMobile" required>
-                    <label for="emailMobile">Enter Email / Mobile number</label>
-                </div>
+        <button type="button" class="login-btn" id="loginBtn">Login</button>
 
-                <!-- Password -->
-                <div class="input-group">
-                    <input type="password" id="password" required>
-                    <label for="password">Enter Password</label>
-                </div>
-
-                <!-- Forgot password (ALERT) -->
-                <div class="forgot-link">
-                    <a href="#" id="forgotLink">Forgot?</a>
-                </div>
-
-                <!-- Login button (ALERT with validation) -->
-                <button type="button" class="login-btn" id="loginBtn">Login</button>
-
-                <!-- OR -->
-                <div class="or-divider">OR</div>
-
-                <!-- Request OTP (ALERT) -->
-                <button type="button" class="otp-btn" id="otpBtn">Request OTP</button>
-
-                <!-- Terms links (ALERT) -->
-                <div class="terms">
-                    By continuing, you agree to Fashion Store's <a href="#" id="termsLink1">Terms of Use</a> and <a href="#" id="termsLink2">Privacy Policy</a>.
-                </div>
-
-                <!-- SIGN UP LINK – NOW SHOWS AN ALERT (CLEAR, INSTANT FEEDBACK) -->
-                <div class="signup-link">
-                    New to Fashion Store? <a href="#" id="signupLink">Sign up</a>
-                </div>
-            </div>
+        <div class="signup-link">
+            Don't have an account? <a href="register.html">Sign up</a>
         </div>
     </div>
 
-    <script>
-        (function() {
-            "use strict";
+    <script type="module">
+        import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
 
-            // Load users data
-            let users = JSON.parse(localStorage.getItem('users')) || [];
+        // Check if user is already logged in
+        onAuthStateChanged(window.auth, (user) => {
+            if (user) {
+                // User is signed in, redirect to dashboard
+                window.location.href = 'dashboard.html';
+            }
+        });
 
-            // Always ensure demo user exists
-            let demoUserExists = users.find(u => u.email === 'demo@example.com');
-            if (!demoUserExists) {
-                demoUserExists = {
-                    id: Date.now(),
-                    name: 'Demo User',
-                    email: 'demo@example.com',
-                    password: 'demo123',
-                    createdAt: new Date().toISOString()
-                };
-                users.push(demoUserExists);
-                localStorage.setItem('users', JSON.stringify(users));
+        // Login button
+        document.getElementById('loginBtn').addEventListener('click', async function(e) {
+            e.preventDefault();
+            const email = document.getElementById('emailMobile').value.trim();
+            const pass = document.getElementById('password').value.trim();
+
+            if (!email || !pass) {
+                alert('⚠️ Please enter both email and password');
+                return;
             }
 
-            // ----- all interactive elements -----
-            const loginBtn = document.getElementById('loginBtn');
-            const otpBtn = document.getElementById('otpBtn');
-            const forgotLink = document.getElementById('forgotLink');
-            const signupLink = document.getElementById('signupLink');
-            const termsLink1 = document.getElementById('termsLink1');
-            const termsLink2 = document.getElementById('termsLink2');
-
-            // ----- LOGIN BUTTON: only allows existing users -----
-            loginBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                const email = document.getElementById('emailMobile').value.trim();
-                const pass = document.getElementById('password').value.trim();
-
-                if (!email || !pass) {
-                    alert('⚠️ Please enter both email and password');
-                    return;
-                }
-
-                // Find existing user
-                const user = users.find(u => u.email === email && u.password === pass);
-                if (!user) {
-                    alert('❌ Invalid email or password. Please try again.');
-                    return;
-                }
-
-                // Login successful
-                localStorage.setItem('currentUser', JSON.stringify(user));
-                localStorage.setItem('isLoggedIn', 'true');
+            try {
+                const userCredential = await window.signInWithEmailAndPassword(window.auth, email, pass);
                 alert('✅ Login Successful!');
-                // Redirect to home page
-                window.location.href = 'index.html';
-            });
-
-            // ----- REQUEST OTP BUTTON: now shows an alert (immediate) -----
-            otpBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                alert('📱 OTP requested (demo) — you would send an OTP here');
-            });
-
-            // ----- FORGOT PASSWORD: alert instead of toast -----
-            forgotLink.addEventListener('click', function(e) {
-                e.preventDefault();
-                alert('🔐 Forgot password flow (demo) — redirect to reset page');
-            });
-
-            // ----- SIGN UP LINK: NOW CLEARLY WORKS (shows alert) -----
-            signupLink.addEventListener('click', function(e) {
-                e.preventDefault();
-                alert('📝 Redirect to Sign Up page (demo) — replace with actual URL');
-                // In a real website, you would do:
-                // window.location.href = '/signup';
-            });
-
-            // ----- TERMS LINKS: alerts -----
-            termsLink1.addEventListener('click', function(e) {
-                e.preventDefault();
-                alert('📄 Terms of Use (demo)');
-            });
-            termsLink2.addEventListener('click', function(e) {
-                e.preventDefault();
-                alert('🔏 Privacy Policy (demo)');
-            });
-
-        })();
+                // Redirect to dashboard
+                window.location.href = 'dashboard.html';
+            } catch (error) {
+                console.error('Login error:', error);
+                let message = '❌ Login failed. Please try again.';
+                if (error.code === 'auth/user-not-found') {
+                    message = '❌ No account found with this email.';
+                } else if (error.code === 'auth/wrong-password') {
+                    message = '❌ Incorrect password.';
+                } else if (error.code === 'auth/invalid-email') {
+                    message = '❌ Invalid email format.';
+                }
+                alert(message);
+            }
+        });
     </script>
 </body>
 </html>
