@@ -375,25 +375,22 @@
             const termsLink1 = document.getElementById('termsLink1');
             const termsLink2 = document.getElementById('termsLink2');
 
-            // ----- LOGIN BUTTON: accepts any data entered -----
+            // ----- LOGIN BUTTON: only allows existing users -----
             loginBtn.addEventListener('click', function(e) {
                 e.preventDefault();
-                const email = document.getElementById('emailMobile').value || 'user@example.com';
-                const pass = document.getElementById('password').value || 'password';
+                const email = document.getElementById('emailMobile').value.trim();
+                const pass = document.getElementById('password').value.trim();
 
-                // Find existing user or create new one
-                let user = users.find(u => u.email === email);
+                if (!email || !pass) {
+                    alert('⚠️ Please enter both email and password');
+                    return;
+                }
+
+                // Find existing user
+                const user = users.find(u => u.email === email && u.password === pass);
                 if (!user) {
-                    // Create new user
-                    user = {
-                        id: Date.now(),
-                        name: email.split('@')[0] || 'User', // Use part before @ as name
-                        email: email,
-                        password: pass,
-                        createdAt: new Date().toISOString()
-                    };
-                    users.push(user);
-                    localStorage.setItem('users', JSON.stringify(users));
+                    alert('❌ Invalid email or password. Please try again.');
+                    return;
                 }
 
                 // Login successful
